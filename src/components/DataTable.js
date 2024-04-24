@@ -49,10 +49,13 @@ function DataTable () {
     };
 
     const get_api_data = async() => {
-        await axios.get('https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json')
+        await axios.get('https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json', {timeout: 5000})
             .then(res => {
                 const data = res.data;
                 set_api_data(data);
+            })
+            .catch((error)=> {
+                console.log(error);
             })
     };
 
@@ -102,6 +105,7 @@ function DataTable () {
             <div>
                 {area_list.map((area) => 
                     <Button 
+                        key={area + '_btn'}
                         style={(area === selected_area) ? selected_btn_style : btn_style} 
                         onClick={() => set_selected_area(area)}
                     > 
@@ -123,7 +127,7 @@ function DataTable () {
                             <TableHead style={{backgroundColor: '#f8f5bc'}}>
                                 <TableRow>
                                     {['日期', '行政區', '位置', '地圖', '現有車輛數', '空位數', '更新時間'].map((title) => 
-                                        <TableCell align="center" style={{color: '#333'}}> {title} </TableCell>
+                                        <TableCell key={title} align="center" style={{color: '#333'}}> {title} </TableCell>
                                     )}
                                 </TableRow>
                             </TableHead>
