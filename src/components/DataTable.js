@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, memo } from "react";
 import axios from 'axios';
 
 import { LocationOn } from '@mui/icons-material';
@@ -34,7 +34,7 @@ function DataTable () {
     const [selected_area, set_selected_area] = useState('北投區');
     
     const [api_data, set_api_data] = useState([]);
-    const display_data = useRef([]);
+    const [display_data, set_display_data] = useState([]);
 
     //頁碼相關
     const [rows_per_page, set_rows_per_page] = useState(10);
@@ -48,8 +48,8 @@ function DataTable () {
         set_page(newPage);
     };
 
-    const get_api_data = () => {
-        axios.get('https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json')
+    const get_api_data = async() => {
+        await axios.get('https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json')
             .then(res => {
                 const data = res.data;
                 set_api_data(data);
@@ -77,21 +77,24 @@ function DataTable () {
     };
 
     useEffect(() => {   
-        get_api_data(); 
+        get_api_data();
 
-        setTimeout(() => {
+        const interval = setInterval(() => {
             get_api_data();
-        }, 60000);
-    });
+        }, 30000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => { 
+        set_display_data(get_display_data(api_data));
+    }, [api_data]);
 
     useEffect(() => {
-        display_data.current = get_display_data(api_data);
-    }, [page, api_data]);
-
-    useEffect(() => {
-        display_data.current = get_display_data(api_data);
+        set_display_data(get_display_data(api_data));
         set_page(0);
     }, [selected_area]);
+
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
@@ -109,12 +112,12 @@ function DataTable () {
 
             {/* 資料表格 */}
             <Box sx={{ width: '90%' }}>
-                <div style={(display_data.current.length === 0) ? {display: 'inline-block', marginTop: '10px'} : {display: 'none'}}>
+                <div style={(display_data.length === 0) ? {display: 'inline-block', marginTop: '10px'} : {display: 'none'}}>
                     <CircularProgress style={{color: 'gray'}}/>
                     <div style={{color: 'gray'}}>資料讀取中</div>
                 </div>
 
-                <Paper style={(display_data.current.length === 0) ? {display: 'none'} : {display: 'block'}}>
+                <Paper style={(display_data.length === 0) ? {display: 'none'} : {display: 'block'}}>
                     <TableContainer>
                         <Table>
                             <TableHead style={{backgroundColor: '#f8f5bc'}}>
@@ -125,7 +128,7 @@ function DataTable () {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {display_data.current.slice(page * rows_per_page, (page + 1) * rows_per_page).map((row) => (
+                                {display_data.slice(page * rows_per_page, (page + 1) * rows_per_page).map((row) => (
                                     <TableRow key={row.name}>
                                         <TableCell align="center">{row.infoDate}</TableCell>
                                         <TableCell align="center">{row.sarea}</TableCell>
@@ -133,7 +136,7 @@ function DataTable () {
                                         <TableCell align="center">
                                             <LocationOn 
                                                 onClick={() => goToMap(row.lat, row.lng)}
-                                                style={{color: 'gray'}} 
+                                                style={{color: 'gray', cursor: 'pointer'}} 
                                             />
                                         </TableCell>
                                         <TableCell align="center">{row.sbi}</TableCell>
@@ -149,7 +152,7 @@ function DataTable () {
                         style={{backgroundColor: '#f8f5bc'}}
                         rowsPerPageOptions={[10, 15, 20]}
                         component="div"
-                        count={display_data.current.length}
+                        count={display_data.length}
                         rowsPerPage={rows_per_page}
                         page={page}
                         onPageChange={handleChangePage}
@@ -161,4 +164,4 @@ function DataTable () {
     );
 }
 
-export default DataTable;
+export default memo(DataTable);
