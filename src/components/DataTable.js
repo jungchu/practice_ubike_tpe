@@ -143,8 +143,10 @@ function DataTable () {
                                                 style={{color: 'gray', cursor: 'pointer'}} 
                                             />
                                         </TableCell>
-                                        <TableCell align="center">{row.sbi}</TableCell>
-                                        <TableCell align="center">{row.bemp}</TableCell>
+                                        {/* 場站目前車輛數量 */}
+                                        <TableCell align="center">{row.available_rent_bikes}</TableCell>
+                                        {/* 空位數量 */}
+                                        <TableCell align="center">{row.available_return_bikes}</TableCell>
                                         <TableCell align="center">{row.srcUpdateTime.split(' ')[1]}</TableCell>
                                     </TableRow>
                                 ))}
