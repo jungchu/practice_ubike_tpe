@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/practice_ubike_tpe/static/css/main.da6d4a66.css",
-    "main.js": "/practice_ubike_tpe/static/js/main.179eb0d0.js",
+    "main.js": "/practice_ubike_tpe/static/js/main.daafe515.js",
     "static/js/453.534706d9.chunk.js": "/practice_ubike_tpe/static/js/453.534706d9.chunk.js",
     "index.html": "/practice_ubike_tpe/index.html",
     "main.da6d4a66.css.map": "/practice_ubike_tpe/static/css/main.da6d4a66.css.map",
-    "main.179eb0d0.js.map": "/practice_ubike_tpe/static/js/main.179eb0d0.js.map",
+    "main.daafe515.js.map": "/practice_ubike_tpe/static/js/main.daafe515.js.map",
     "453.534706d9.chunk.js.map": "/practice_ubike_tpe/static/js/453.534706d9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.da6d4a66.css",
-    "static/js/main.179eb0d0.js"
+    "static/js/main.daafe515.js"
   ]
 }
