@@ -139,7 +139,7 @@ function DataTable () {
                                         <TableCell align="center">{row.sna.split('YouBike2.0_')[1]}</TableCell>
                                         <TableCell align="center">
                                             <LocationOn 
-                                                onClick={() => goToMap(row.lat, row.lng)}
+                                                onClick={() => goToMap(row.latitude, row.longitude)}
                                                 style={{color: 'gray', cursor: 'pointer'}} 
                                             />
                                         </TableCell>
